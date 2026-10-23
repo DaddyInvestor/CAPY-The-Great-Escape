@@ -25,7 +25,7 @@ This avoids destructive voxel terrain edits on reinstall.
 ## Edit-mode installer
 
 `tools/generate_installer.py` bundles the same six generation modules in dependency
-order into `studio/InstallZoo.command.luau`. It replaces the known local module
+order into `STUDIO_ONE_PASTE.lua`. It replaces the known local module
 imports with local bundled references and rejects unresolved dependencies. The
 result does not wait for synced modules, load remote assets, create scripts or
 require Play Mode. Its source hash and `--check` mode catch stale generated files.

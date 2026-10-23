@@ -65,7 +65,7 @@ was moved into the service yard before the passing run.
 - src/ServerScriptService/World/Landscape.luau
 - src/ServerScriptService/World/Landmarks.luau
 - src/ServerScriptService/World/ZooBuilder.luau
-- studio/InstallZoo.command.luau
+- STUDIO_ONE_PASTE.lua
 - tools/generate_installer.py
 - tools/generate_layout_diagram.py
 - tests/check_world.py

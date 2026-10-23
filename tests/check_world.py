@@ -63,9 +63,9 @@ with tempfile.TemporaryDirectory(prefix="capy-check-") as directory:
     actual_sources = {str(p.relative_to(ROOT)) for p in (ROOT / "src").rglob("*.luau")}
     assert actual_sources == {source for source, _ in sources.values()}
     print("PASS: all 8 production scripts have the expected Rojo path and class", flush=True)
-    installer = (ROOT / "studio/InstallZoo.command.luau").read_text()
+    installer = (ROOT / "STUDIO_ONE_PASTE.lua").read_text()
     assert not re.search(r'\brequire\s*\(|\bscript\.|WaitForChild|HttpGet|GetAsync|InsertService', installer)
-    run("luau-compile", "--null", *sorted(actual_sources), "studio/InstallZoo.command.luau")
+    run("luau-compile", "--null", *sorted(actual_sources), "STUDIO_ONE_PASTE.lua")
 
     chunks = [(ROOT / "tests/roblox_mock.luau").read_text()]
     for path, (source, class_name) in sources.items():

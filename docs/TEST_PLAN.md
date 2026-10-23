@@ -28,7 +28,7 @@ real avatar navigation or device performance testing.
 ## Studio Edit Mode acceptance — NOT RUN
 
 1. Open Studio on a supported machine, stop Play/Run, and open Command Bar.
-2. Copy the entire Raw `studio/InstallZoo.command.luau`, paste and execute it.
+2. Copy the entire Raw `STUDIO_ONE_PASTE.lua`, paste and execute it.
 3. Confirm one `Workspace.CapyWorld` with `GeneratorId=CAPY-M01A`, `Phase=R1`.
 4. Frame the world; inspect all eight zones, materials, hill/forest silhouettes,
    curved routes, pond lobes, roofs, signs and the absence of oversized empty areas.

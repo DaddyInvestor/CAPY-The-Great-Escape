@@ -50,7 +50,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="Fail if the checked-in installer is stale")
     args = parser.parse_args()
-    output = ROOT / "studio/InstallZoo.command.luau"
+    output = ROOT / "STUDIO_ONE_PASTE.lua"
     expected = generate()
     if args.check:
         if not output.exists() or output.read_text() != expected:
