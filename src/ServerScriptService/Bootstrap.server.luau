@@ -7,10 +7,10 @@ local ZooBuilder = require(
 local world = ZooBuilder.Build()
 
 print(
-    "[CAPY-M01A] Zoo generated:",
+    "[CAPY-M01A-R1] Zoo generated:",
     world:GetFullName()
 )
 
 print(
-    "[CAPY-M01A] Static zoo prototype only."
+    "[CAPY-M01A-R1] R1 master layout only; no escape gameplay or Studio validation implied."
 )

@@ -53,3 +53,11 @@ AI, puzzle logic, mission completion, saving,
 rewards, custom capybara character.
 
 Checkpoint markers are visual only in M01A.
+
+## R1 reconstruction
+
+The current foundation is the 600 × 500 eight-zone R1 layout, replacing the
+original blockout. See R1_LAYOUT.md for circulation and R2_ASSET_PLAN.md for future
+asset reservations. The habitat gate is open for inspection; perimeter escape
+anchors are closed and nonfunctional. Studio Playtest is NOT RUN. R2–R5 must wait
+for R1 review. No gameplay systems have been added.

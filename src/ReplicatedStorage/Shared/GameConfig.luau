@@ -3,9 +3,9 @@
 local GameConfig = {
 
     World = {
-        Width = 420,
-        Depth = 360,
-        WallHeight = 18,
+        Width = 600,
+        Depth = 500,
+        WallHeight = 12,
     },
 
     Player = {
@@ -29,6 +29,10 @@ local GameConfig = {
         Wood = Color3.fromRGB(145, 100, 65),
         Roof = Color3.fromRGB(180, 89, 59),
         Water = Color3.fromRGB(73, 178, 206),
+        DarkWood = Color3.fromRGB(94, 65, 46),
+        Cream = Color3.fromRGB(244, 226, 184),
+        Stone = Color3.fromRGB(142, 151, 132),
+        Flower = Color3.fromRGB(236, 128, 131),
     },
 
 }
