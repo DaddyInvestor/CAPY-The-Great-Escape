@@ -1,4 +1,20 @@
 # CAPY-The-Great-Escape
+
+## เปิดสวนสัตว์ใน Roblox Studio แบบก๊อปโค้ดครั้งเดียว (ง่ายที่สุด)
+
+**ไม่ต้องใช้ Rojo, ZIP หรือ Terminal**
+
+1. เปิดไฟล์ [STUDIO_ONE_PASTE.lua](STUDIO_ONE_PASTE.lua) ใน Branch นี้
+2. กดปุ่ม **Copy raw file** ของ GitHub เพื่อคัดลอกโค้ดทั้งหมด
+3. เปิด Roblox Studio -> สร้าง **Baseplate** ใหม่
+4. เปิด **View -> Command Bar** แล้ววางโค้ดทั้งหมด กด **Enter** ตอนอยู่ในโหมด Edit
+5. ตรวจว่า Explorer มี **Workspace -> CapyWorld**; กด **File -> Save to File** เก็บเป็น .rbxl
+6. กด Play ดูฉากและตำแหน่งเกิด (ลบ SpawnLocation เริ่มต้นของ Baseplate หากมี เพื่อใช้ CapySpawn)
+
+**ข้อควรทราบ:** รันโค้ดซ้ำจะสร้าง CapyWorld ใหม่แทนตัวเก่า ฉากเป็นต้นแบบ Static ใน Edit Mode; ยังไม่มีคาปิบาร่า 4 ขา เจ้าหน้าที่ไล่จับ หรือภารกิจหนีสำเร็จ และวิธีนี้ไม่จำเป็นต้องเชื่อมต่อกับ Rojo
+
+---
+
 CAPY-The-Great-Escape
 
 ## CAPY-M01A FOUNDATION
