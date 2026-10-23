@@ -1,0 +1,6 @@
+.DS_Store
+*.rbxl.lock
+*.rbxlx.lock
+*.log
+.rojo-cache/
+/build/

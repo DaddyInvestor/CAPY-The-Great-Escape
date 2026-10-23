@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="620" viewBox="0 0 980 620">
+<rect width="980" height="620" fill="#faf5e8"/>
+<g font-family="sans-serif" fill="#294839">
+<text x="35" y="30" font-size="22" font-weight="bold">CAPY R1 — authored layout schematic</text>
+<text x="35" y="52" font-size="13">Design plan only. Not a Studio screenshot or visual verification.</text>
+<g transform="translate(35 75)">
+<rect width="600" height="500" rx="8" fill="#92b779" stroke="#496b43" stroke-width="2"/>
+<rect x="0" y="0" width="600" height="35" fill="#72998b"/>
+<text x="160" y="22" font-size="12">Khao Yai ridge / forest backdrop</text>
+<rect x="18" y="36" width="564" height="449" fill="none" stroke="#775a39" stroke-width="3" stroke-dasharray="6 3"/>
+<ellipse cx="110.0" cy="125.0" rx="70" ry="49.699999999999996" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="245.0" cy="125.0" rx="43" ry="30.529999999999998" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="375.0" cy="125.0" rx="45" ry="31.95" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="510.0" cy="125.0" rx="46" ry="32.66" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="105.0" cy="300.0" rx="57" ry="40.47" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="310.0" cy="300.0" rx="70" ry="49.699999999999996" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="505.0" cy="428.0" rx="52" ry="36.92" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<ellipse cx="105.0" cy="430.0" rx="49" ry="34.79" fill="#bcce8a" stroke="#64854e" opacity=".8"/>
+<path d="M110.0,125.0 Q180.0,125.0 245.0,125.0" fill="none" stroke="#e8c98f" stroke-width="18" stroke-linecap="round"/>
+<path d="M245.0,125.0 Q312.0,152.0 375.0,125.0" fill="none" stroke="#e8c98f" stroke-width="24" stroke-linecap="round"/>
+<path d="M375.0,125.0 Q445.0,145.0 510.0,125.0" fill="none" stroke="#e8c98f" stroke-width="22" stroke-linecap="round"/>
+<path d="M196.0,125.0 Q205.0,270.0 105.0,300.0" fill="none" stroke="#e8c98f" stroke-width="16" stroke-linecap="round"/>
+<path d="M105.0,300.0 Q205.0,332.0 310.0,300.0" fill="none" stroke="#e8c98f" stroke-width="20" stroke-linecap="round"/>
+<path d="M375.0,125.0 Q405.0,238.0 310.0,300.0" fill="none" stroke="#e8c98f" stroke-width="24" stroke-linecap="round"/>
+<path d="M510.0,125.0 Q555.0,290.0 505.0,428.0" fill="none" stroke="#e8c98f" stroke-width="22" stroke-linecap="round"/>
+<path d="M310.0,300.0 Q410.0,412.0 505.0,428.0" fill="none" stroke="#e8c98f" stroke-width="24" stroke-linecap="round"/>
+<path d="M105.0,300.0 Q130.0,368.0 105.0,430.0" fill="none" stroke="#e8c98f" stroke-width="16" stroke-linecap="round"/>
+<path d="M105.0,430.0 Q265.0,456.0 310.0,300.0" fill="none" stroke="#e8c98f" stroke-width="16" stroke-linecap="round"/>
+<path d="M505,428 L505,485" stroke="#e8c98f" stroke-width="24"/>
+<path d="M53,84 C55,60 100,48 123,69 C140,85 116,110 86,103 C64,110 48,100 53,84" fill="#49b2ce"/>
+<circle cx="110.0" cy="125.0" r="11" fill="#37533b"/>
+<text x="110.0" y="130.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">A</text>
+<circle cx="245.0" cy="125.0" r="11" fill="#37533b"/>
+<text x="245.0" y="130.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">B</text>
+<circle cx="375.0" cy="125.0" r="11" fill="#37533b"/>
+<text x="375.0" y="130.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">C</text>
+<circle cx="510.0" cy="125.0" r="11" fill="#37533b"/>
+<text x="510.0" y="130.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">D</text>
+<circle cx="105.0" cy="300.0" r="11" fill="#37533b"/>
+<text x="105.0" y="305.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">E</text>
+<circle cx="310.0" cy="300.0" r="11" fill="#37533b"/>
+<text x="310.0" y="305.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">F</text>
+<circle cx="505.0" cy="428.0" r="11" fill="#37533b"/>
+<text x="505.0" y="433.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">G</text>
+<circle cx="105.0" cy="430.0" r="11" fill="#37533b"/>
+<text x="105.0" y="435.0" fill="white" text-anchor="middle" font-size="14" font-weight="bold">H</text>
+<circle cx="82" cy="135" r="5" fill="#fff3bd" stroke="#704c29"/>
+<text x="61" y="155" font-size="11">spawn</text>
+</g>
+<text x="670" y="112" font-size="16" font-weight="bold">A — Capybara Habitat</text>
+<text x="670" y="129" font-size="12">Center -190, -125</text>
+<text x="670" y="152" font-size="16" font-weight="bold">B — Animal Walkway</text>
+<text x="670" y="169" font-size="12">Center -55, -125</text>
+<text x="670" y="192" font-size="16" font-weight="bold">C — Visitor Plaza</text>
+<text x="670" y="209" font-size="12">Center 75, -125</text>
+<text x="670" y="232" font-size="16" font-weight="bold">D — Zoo Security</text>
+<text x="670" y="249" font-size="12">Center 210, -125</text>
+<text x="670" y="272" font-size="16" font-weight="bold">E — Maintenance Yard</text>
+<text x="670" y="289" font-size="12">Center -195, 50</text>
+<text x="670" y="312" font-size="16" font-weight="bold">F — Tropical Garden</text>
+<text x="670" y="329" font-size="12">Center 10, 50</text>
+<text x="670" y="352" font-size="16" font-weight="bold">G — Grand Zoo Entrance</text>
+<text x="670" y="369" font-size="12">Center 205, 178</text>
+<text x="670" y="392" font-size="16" font-weight="bold">H — Forest Perimeter</text>
+<text x="670" y="409" font-size="12">Center -195, 180</text>
+<text x="670" y="460" font-size="13">Sand: curved circulation, 16–24 studs</text>
+<text x="670" y="485" font-size="13">Dashed: perimeter / future escape anchors</text>
+<text x="670" y="510" font-size="13">Ground: 600 × 500 studs; north at top</text>
+<text x="670" y="550" font-size="13">R1 review required before R2–R5.</text>
+</g></svg>
