@@ -20,6 +20,7 @@ function G.part(parent: Instance, name: string, size: Vector3, frame: CFrame,
     p.Anchored = true
     p.CanCollide = solid ~= false
     p.CanTouch = false
+    p.CanQuery = solid ~= false
     p.TopSurface = Enum.SurfaceType.Smooth
     p.BottomSurface = Enum.SurfaceType.Smooth
     p.Parent = parent

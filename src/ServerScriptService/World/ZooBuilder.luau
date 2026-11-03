@@ -7,6 +7,8 @@ local G = require(script.Parent.Geometry)
 local Landscape = require(script.Parent.Landscape)
 local Landmarks = require(script.Parent.Landmarks)
 
+local StoryDetails = require(script.Parent.StoryDetails)
+
 local ZooBuilder = {}
 
 local function gate(parent: Model, id: string, a: Vector3, b: Vector3, style)
@@ -83,7 +85,7 @@ local function habitat(world: Model, style)
         15, 1.1, style.Stone, Enum.Material.Pebble)
 end
 
-function ZooBuilder.Build(): Model
+function ZooBuilder.Build(prepare: ((Model) -> ())?): Model
     -- Refuse name collisions rather than deleting user content. M01A legacy ownership
     -- is accepted only so this reconstruction can upgrade the previously supplied world.
     local previous = {}
@@ -110,6 +112,7 @@ function ZooBuilder.Build(): Model
     Landmarks.build(world, Layout, Config.Style)
     boundary(world, Config.Style)
     habitat(world, Config.Style)
+    StoryDetails.build(world, Config.Style)
     local markers = G.model(world, "CheckpointMarkers")
     for _, checkpoint in Layout.Checkpoints do
         local marker = G.disc(markers, checkpoint.Id, checkpoint.Position.X, checkpoint.Position.Z,
@@ -117,6 +120,7 @@ function ZooBuilder.Build(): Model
         marker:SetAttribute("CheckpointId", checkpoint.Id)
         marker:SetAttribute("VisualOnly", true)
     end
+    if prepare then prepare(world) end
     for _, object in previous do object:Destroy() end
     world.Parent = Workspace
     return world

@@ -4,3 +4,4 @@
 *.log
 .rojo-cache/
 /build/
+__pycache__/

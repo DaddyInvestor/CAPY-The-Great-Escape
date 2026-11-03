@@ -1,16 +1,6 @@
 --!strict
-
-local ZooBuilder = require(
-    script.Parent.World.ZooBuilder
-)
-
+local ZooBuilder = require(script.Parent.World.ZooBuilder)
+local QuestServer = require(script.Parent.Gameplay.QuestServer)
 local world = ZooBuilder.Build()
-
-print(
-    "[CAPY-M01A-R1] Zoo generated:",
-    world:GetFullName()
-)
-
-print(
-    "[CAPY-M01A-R1] R1 master layout only; no escape gameplay or Studio validation implied."
-)
+QuestServer.Start(world)
+print("[CAPY POLISH] Park and session quest started:", world:GetFullName())

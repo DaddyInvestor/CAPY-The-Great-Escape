@@ -1,57 +1,58 @@
-# CAPY R1 architecture
+# CAPY POLISH-1 architecture
 
-## Runtime source mapping
+The existing R1 world remains modular: Shared.GameConfig/WorldLayout, World.Geometry,
+Landscape, Landmarks and ZooBuilder. StoryDetails adds fixed prompt stations,
+Mango's breakfast, the pump, Ranger Mali and the forest postcard. Geometry and
+runtime files are owned by `CapyWorld`; shared Terrain/Lighting are untouched.
 
-`src/ReplicatedStorage/Shared` maps to `ReplicatedStorage.Shared`:
+## Gameplay
 
-- `GameConfig`: dimensions, colors and future player/guard tuning (not AI).
-- `WorldLayout`: eight centers, curved route controls and widths, spawn,
-  checkpoints, future escape positions and R2 asset reservations.
-- `MissionConfig`: future mission states/routes/rewards and marker IDs.
+- `Shared.QuestConfig`: fixed ordered objectives, positions, prompt labels and hints.
+- `Gameplay.QuestLogic`: pure session-state transition/snapshot module.
+- `Gameplay.QuestServer`: trusted player/character/distance/order/cooldown checks,
+  snapshots, signals, per-player state, reactions, shared gate and respawns.
+- `StarterPlayerScripts.CapyClient`: journal, native-prompt companion feedback,
+  distance updates, eased FOV and lifecycle cleanup. Default Roblox controls remain.
 
-`src/ServerScriptService` maps to `ServerScriptService`:
+Only the server mutates progression. Clients can request a bounded, rate-limited
+snapshot; no advance/reward remote exists. ProximityPrompt handlers validate player
+membership, living character, distance and cooldown before applying an ordered
+transition. This is not a complete movement anti-cheat system. No currency/saving.
 
-- `Bootstrap.server.luau` requires `World.ZooBuilder` and calls `Build()`.
-- `Geometry`: anchored primitives, signs, quadratic curves, fences and beams.
-- `Landscape`: curved roads/roadbeds, material terraces, trees, pond and backdrop.
-- `Landmarks`: zone anchors and reservation metadata.
-- `ZooBuilder`: ownership, detached construction, boundaries, spawn and markers.
+World state such as the pump light and gate is shared; quest progress is personal.
+Opening the gate does not complete other players' quests. Progress lives only in
+server memory and resets on rejoin/rebuild. CharacterAdded selects the next safe
+spawn according to progress. Departure and world destruction clean up sessions,
+character/prompt hooks, owned delivered GUIs and signals.
 
-All scenery uses owned instances under `Workspace.CapyWorld`. Native shared
-`Workspace.Terrain` is intentionally untouched. Natural contours are formed from
-overlapping elliptical terraces, varied primitive silhouettes and wedge ridges.
-This avoids destructive voxel terrain edits on reinstall.
+## One-paste and Rojo parity
 
-## Edit-mode installer
+`tools/generate_installer.py` bundles generation modules directly and saves a
+self-contained server Script plus client ScreenGui/LocalScript template in
+`CapyWorld.Runtime`. The server clones the owned client template into each
+PlayerGui. Templates have ResetOnSpawn=false. No StarterGui edit is necessary.
+Studio Command Bar in Edit Mode has the required permission to write Script.Source;
+this operation, save/reopen and real execution still require Studio acceptance.
 
-`tools/generate_installer.py` bundles the same six generation modules in dependency
-order into `STUDIO_ONE_PASTE.lua`. It replaces the known local module
-imports with local bundled references and rejects unresolved dependencies. The
-result does not wait for synced modules, load remote assets, create scripts or
-require Play Mode. Its source hash and `--check` mode catch stale generated files.
-Bootstrap and future mission logic are deliberately excluded.
+In Rojo, Bootstrap builds and starts the same QuestServer module; StarterPlayer
+maps the same client source. The installer is outside the automatic Rojo mapping.
+Saved sources are generated from production source, not separately maintained.
+Source hashes cover both generation and runtime; --check rejects stale bundles.
 
-`tools/generate_layout_diagram.py` derives an SVG plan from the layout data; it is
-an approximate planning diagram, not an in-engine screenshot.
+`ZooBuilder.Build(prepare)` constructs detached geometry and optional saved runtime
+before replacing old owned worlds. Ownership checks refuse unrelated name
+collisions and accept the legacy M01A tags. A failed preparation preserves the
+old world. The runtime and client both guard duplicate controllers; only owned
+GUI names can be replaced. Rebuilds deliberately start a fresh session.
 
-## Replacement contract
+## Performance and validation
 
-`GeneratorId=CAPY-M01A` marks owned worlds. For one-time upgrade compatibility,
-legacy worlds with `Generated=true`, `Mission=CAPY-M01A` and no `GeneratorId` are
-also accepted. Any unowned `CapyWorld` name collision aborts without replacement.
-The next world is constructed detached; an error preserves the previous visible
-world. On success, only the old owned world(s) are destroyed and the new one is
-parented to Workspace. No random seed, current time or user-specific state changes
-placement. Generated geometry is identical across the installer and bootstrap.
+Road surfaces/shoulders overlap; round joints remain at sharper bends/endpoints.
+Decorative geometry has CanCollide/CanTouch/CanQuery disabled as appropriate.
+There is no server heartbeat scan. The single client heartbeat updates the journal
+at 4 Hz; character-speed changes use quantized camera tween targets. NPC reactions
+are event-driven with per-part overlap guards and completion cleanup.
 
-## Validation boundary
-
-The headless mock supports only the data-model and math features this builder
-uses. It checks generated positions and collision flags; it is not a Roblox
-physics engine. The standalone installer is executed without the original source
-services. Tests cover repeated replacement, owned legacy upgrades, refused user
-name collisions, and an injected construction failure preserving the old world.
-Studio validation and R1 visual review remain separate prerequisites for R2.
-
-Future interactions, progress, rewards and checkpoint saving must be validated
-server-side. Never trust client-provided rewards or progress.
+Tests execute actual modules, the exact saved server bundle and actual client
+source against a limited Roblox mock. They are not a physics/replication/rendering
+engine. See POLISH_01_REVIEW.md for the three-pass comparison and remaining blockers.

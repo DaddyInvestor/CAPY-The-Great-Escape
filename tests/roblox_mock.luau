@@ -1,3 +1,27 @@
+local mockClock = 100
+local os = {clock=function() return mockClock end}
+local task = {spawn=function(callback) callback() end}
+local TweenInfo = {new=function(...) return {...} end}
+local UDim = {new=function(a,b) return {Scale=a,Offset=b} end}
+local Vector2 = {new=function(x,y) return {X=x,Y=y} end}
+local mockClientPlayer=nil
+local function signal()
+    local callbacks={}
+    return {Connect=function(_,callback)
+        local connection={Connected=true}
+        function connection:Disconnect() self.Connected=false end
+        table.insert(callbacks,{connection,callback})
+        return connection
+    end, Fire=function(_, ...)
+        for _, entry in table.clone(callbacks) do
+            if entry[1].Connected then entry[2](...) end
+        end
+    end, Count=function()
+        local n=0
+        for _, entry in callbacks do if entry[1].Connected then n+=1 end end
+        return n
+    end}
+end
 -- Minimal data model for headless checks; not an engine or physics emulator.
 local vmt = {}
 local Vector3 = {}
@@ -62,7 +86,11 @@ local Color3 = {
     fromRGB = function(r, g, b) return {R = r / 255, G = g / 255, B = b / 255} end,
     new = function(r, g, b) return {R = r, G = g, B = b} end,
 }
-local UDim2 = {fromScale = function(x, y) return {X = x, Y = y} end}
+local UDim2 = {
+    fromScale = function(x,y) return {X={Scale=x,Offset=0},Y={Scale=y,Offset=0}} end,
+    fromOffset = function(x,y) return {X={Scale=0,Offset=x},Y={Scale=0,Offset=y}} end,
+    new = function(a,b,c,d) return {X={Scale=a,Offset=b},Y={Scale=c,Offset=d}} end,
+}
 local Enum = setmetatable({}, {__index = function(self, name)
     local enum = setmetatable({}, {__index = function(_, value) return name .. "." .. value end})
     rawset(self, name, enum)
@@ -91,12 +119,16 @@ local mt = {
             if index then table.remove(old._children, index) end
         end
         rawset(self, "_parent", value)
-        if value then table.insert(value._children, self) end
+        if value then table.insert(value._children, self); value.ChildAdded:Fire(self) end
     end,
 }
 local Instance = {new = function(className)
-    return setmetatable({ClassName = className, Name = className,
+    local object = setmetatable({ClassName = className, Name = className,
         _children = {}, _attributes = {}, Transparency = 0, _frame = CFrame.new()}, mt)
+    for _, name in {"Destroying","ChildAdded","CharacterAdded","Triggered","OnClientEvent","Running","Activated"} do
+        object[name]=signal()
+    end
+    return object
 end}
 function methods:GetChildren() return table.clone(self._children) end
 function methods:GetDescendants()
@@ -122,6 +154,7 @@ function methods:GetFullName()
     return if self.Parent then self.Parent:GetFullName() .. "." .. self.Name else self.Name
 end
 function methods:Destroy()
+    self.Destroying:Fire()
     for _, child in self:GetChildren() do child:Destroy() end
     self.Parent = nil
 end
@@ -130,6 +163,19 @@ function methods:IsA(className)
     return self.ClassName == className or (className == "BasePart"
         and table.find({"Part", "WedgePart", "SpawnLocation"}, self.ClassName) ~= nil)
 end
+function methods:FindFirstChildOfClass(className)
+    for _, object in self._children do if object.ClassName==className then return object end end
+end
+function methods:PivotTo(frame)
+    local root=self:FindFirstChild("HumanoidRootPart")
+    if root then root.CFrame=frame end
+end
+function methods:FireClient(player,value)
+    self._sent=self._sent or {}
+    self._sent[player]=value
+    if player==mockClientPlayer then self.OnClientEvent:Fire(value) end
+end
+function methods:InvokeServer() return self.OnServerInvoke(mockClientPlayer) end
 local game = Instance.new("DataModel")
 game.Name = "game"
 local function child(parent, className, name)
@@ -141,6 +187,34 @@ end
 local Workspace = child(game, "Workspace", "Workspace")
 child(game, "ReplicatedStorage", "ReplicatedStorage")
 child(game, "ServerScriptService", "ServerScriptService")
+local Players=child(game,"Players","Players")
+Players.PlayerAdded,Players.PlayerRemoving=signal(),signal()
+function Players:GetPlayers() return self:GetChildren() end
+local TweenService=child(game,"TweenService","TweenService")
+function TweenService:Create(object,info,goals)
+    local tween={Completed=signal()}
+    function tween:Play()
+        for k,v in goals do object[k]=v end
+        self.Completed:Fire()
+    end
+    function tween:Cancel() end
+    return tween
+end
+local RunService=child(game,"RunService","RunService")
+RunService.Heartbeat=signal()
+local camera=child(Workspace,"Camera","Camera")
+camera.FieldOfView=70
+Workspace.CurrentCamera=camera
+function methods:Clone()
+    local copy=Instance.new(self.ClassName)
+    for key,value in self do
+        if string.sub(key,1,1)~="_" and not (type(value)=="table" and value.Connect) then copy[key]=value end
+    end
+    copy._attributes=table.clone(self._attributes)
+    copy._frame=frame(self._frame.Position,table.clone(self._frame.r))
+    for _, item in self:GetChildren() do item:Clone().Parent=copy end
+    return copy
+end
 function game:GetService(name) return self:WaitForChild(name) end
 
 local loaders, cache = {}, {}

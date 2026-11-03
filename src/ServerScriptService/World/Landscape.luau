@@ -13,7 +13,7 @@ function Landscape.paths(world: Model, layout, style)
         path:SetAttribute("To", route.To)
         path:SetAttribute("Width", route.Width)
         local a, b = route.Via or centers[route.From], centers[route.To]
-        local steps = math.ceil(((route.Control - a).Magnitude + (b - route.Control).Magnitude) / 10)
+        local steps = math.ceil(((route.Control - a).Magnitude + (b - route.Control).Magnitude) / 14)
         local previous = a
         for i = 1, steps do
             local current = G.curve(a, route.Control, b, i / steps)
@@ -22,11 +22,18 @@ function Landscape.paths(world: Model, layout, style)
             segment:SetAttribute("Start", previous)
             segment:SetAttribute("Finish", current)
             segment:SetAttribute("Width", route.Width)
-            G.beam(path, "GravelShoulder", previous - Vector3.new(0, 0.7, 0),
+            segment.Size += Vector3.new(0, 0, 1.2)
+            local shoulder = G.beam(path, "GravelShoulder", previous - Vector3.new(0, 0.7, 0),
                 current - Vector3.new(0, 0.7, 0), route.Width + 3, 1.1,
                 style.Stone, Enum.Material.Pebble)
-            G.disc(path, "RoundJoin", current.X, current.Z, route.Width / 2, route.Width / 2,
-                current.Y + 0.15, 0.3, style.Sand, Enum.Material.Sandstone)
+            shoulder.Size += Vector3.new(0, 0, 1.2)
+            local nextPoint = G.curve(a, route.Control, b, math.min(1, (i + 1) / steps))
+            local bend = if i == steps then 1 else (current - previous).Unit:Dot((nextPoint - current).Unit)
+            -- Overlap gentle joins; retain round paving at sharper turns and endpoints.
+            if bend < 0.995 or i == steps then
+                G.disc(path, "RoundJoin", current.X, current.Z, route.Width / 2, route.Width / 2,
+                    current.Y + 0.15, 0.3, style.Sand, Enum.Material.Sandstone)
+            end
             table.insert(segments, {A = previous, B = current, Width = route.Width, Route = index})
             previous = current
         end
@@ -147,6 +154,17 @@ function Landscape.pond(parent: Model, style)
         local water = G.disc(pond, "WaterLobe" .. i, lobe[1], lobe[2], lobe[3], lobe[4],
             0.38, 0.13, style.Water, Enum.Material.SmoothPlastic, false)
         water.Transparency = 0.12
+    end
+    for i = 1, 5 do
+        local x, z = -225 + i * 5, -170 + math.sin(i * 2) * 7
+        G.disc(pond, "LilyPad", x, z, 1.7, 1.2, 0.48, 0.12, style.GrassLight, Enum.Material.Grass, false)
+        G.ellipsoid(pond, "Lotus", Vector3.new(x, 0.7, z), Vector3.new(1.1, 0.6, 1.1),
+            style.Flower, Enum.Material.SmoothPlastic, false)
+    end
+    G.beam(pond, "ViewingDeck", Vector3.new(-239, 0.8, -145), Vector3.new(-211, 0.8, -145),
+        7, 0.6, style.Wood, Enum.Material.WoodPlanks)
+    for _, x in {-236, -215} do
+        G.part(pond, "DeckSupport", Vector3.new(2, 1, 7), CFrame.new(x, 0.5, -145), style.DarkWood, Enum.Material.Wood)
     end
     for i = 1, 8 do
         local x, z = -246 + i * 7, -187 + math.sin(i) * 3

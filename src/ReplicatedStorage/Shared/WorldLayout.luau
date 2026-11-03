@@ -2,7 +2,7 @@
 -- R1 master plan. X/Z are studs; route node Y is the walking surface center.
 local Layout = {
     GeneratorId = "CAPY-M01A",
-    Phase = "R1",
+    Phase = "POLISH-1",
     Zones = {
         {Id = "A", Name = "Capybara Habitat", Center = Vector3.new(-190, 0.6, -125), Radius = 70},
         {Id = "B", Name = "Animal Walkway", Center = Vector3.new(-55, 0.6, -125), Radius = 43},
@@ -35,6 +35,9 @@ local Layout = {
     },
     -- Reserved R2 footprints are data, not obstructing placeholder cubes.
     Reservations = {
+        {Id = "GardenPump", Center = Vector3.new(8, 0, -5), Size = Vector3.new(16, 12, 16)},
+        {Id = "RangerMali", Center = Vector3.new(119, 0, -95), Size = Vector3.new(20, 14, 18)},
+        {Id = "ForestPostcard", Center = Vector3.new(-222, 0, 150), Size = Vector3.new(20, 12, 16)},
         {Id = "HabitatShelter", Center = Vector3.new(-246, 0, -79), Size = Vector3.new(36, 24, 28)},
         {Id = "CanopyWalk", Center = Vector3.new(-59, 0, -163), Size = Vector3.new(40, 24, 24)},
         {Id = "PlazaKiosks", Center = Vector3.new(107, 0, -166), Size = Vector3.new(30, 22, 24)},

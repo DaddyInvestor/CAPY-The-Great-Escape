@@ -7,6 +7,7 @@ Requires rojo, luau, and luau-compile on PATH.
 
 import json
 import re
+import importlib.util
 from pathlib import Path
 import subprocess
 import tempfile
@@ -52,6 +53,16 @@ with tempfile.TemporaryDirectory(prefix="capy-check-") as directory:
             "src/ServerScriptService/World/Landmarks.luau", "ModuleScript"),
         "game.ServerScriptService.World.ZooBuilder": (
             "src/ServerScriptService/World/ZooBuilder.luau", "ModuleScript"),
+        "game.ReplicatedStorage.Shared.QuestConfig": (
+            "src/ReplicatedStorage/Shared/QuestConfig.luau", "ModuleScript"),
+        "game.ServerScriptService.World.StoryDetails": (
+            "src/ServerScriptService/World/StoryDetails.luau", "ModuleScript"),
+        "game.ServerScriptService.Gameplay.QuestLogic": (
+            "src/ServerScriptService/Gameplay/QuestLogic.luau", "ModuleScript"),
+        "game.ServerScriptService.Gameplay.QuestServer": (
+            "src/ServerScriptService/Gameplay/QuestServer.luau", "ModuleScript"),
+        "game.StarterPlayer.StarterPlayerScripts.CapyClient": (
+            "src/StarterPlayer/StarterPlayerScripts/CapyClient.client.luau", "LocalScript"),
         "game.ServerScriptService.Bootstrap": (
             "src/ServerScriptService/Bootstrap.server.luau", "Script"),
     }
@@ -62,9 +73,14 @@ with tempfile.TemporaryDirectory(prefix="capy-check-") as directory:
                    for p in node["filePaths"]), (path, node)
     actual_sources = {str(p.relative_to(ROOT)) for p in (ROOT / "src").rglob("*.luau")}
     assert actual_sources == {source for source, _ in sources.values()}
-    print("PASS: all 8 production scripts have the expected Rojo path and class", flush=True)
+    print("PASS: all 13 production scripts have the expected Rojo path and class", flush=True)
     installer = (ROOT / "STUDIO_ONE_PASTE.lua").read_text()
-    assert not re.search(r'\brequire\s*\(|\bscript\.|WaitForChild|HttpGet|GetAsync|InsertService', installer)
+    embedded_sources = re.findall(r"\[====\[(.*?)\]====\]", installer, re.S)
+    assert len(embedded_sources) == 2, "Expected saved server and client sources"
+    for source in embedded_sources:
+        assert not re.search(r'\brequire\s*\(|HttpGet|GetAsync|InsertService', source)
+    installer_body = re.sub(r"\[====\[.*?\]====\]", '"embedded source"', installer, flags=re.S)
+    assert not re.search(r'\brequire\s*\(|\bscript\.|WaitForChild|HttpGet|GetAsync|InsertService', installer_body)
     run("luau-compile", "--null", *sorted(actual_sources), "STUDIO_ONE_PASTE.lua")
 
     chunks = [(ROOT / "tests/roblox_mock.luau").read_text()]
@@ -74,6 +90,11 @@ with tempfile.TemporaryDirectory(prefix="capy-check-") as directory:
     chunks.append((ROOT / "tests/world.spec.luau").read_text())
     chunks.append("local function runInstaller()\n" + installer + "\nend\n")
     chunks.append((ROOT / "tests/installer.spec.luau").read_text())
+    spec = importlib.util.spec_from_file_location("capy_bundle", ROOT / "tools/generate_installer.py")
+    generator = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(generator)
+    chunks.append("local function startSavedServer(script)\n" + generator.bundle_runtime() + "\nend\n")
+    chunks.append((ROOT / "tests/gameplay.spec.luau").read_text())
     bundle = temporary / "world.spec.luau"
     bundle.write_text("\n".join(chunks))
     run("luau", str(bundle))

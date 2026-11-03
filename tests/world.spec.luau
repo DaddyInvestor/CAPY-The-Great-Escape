@@ -38,9 +38,12 @@ local bootstrap = resolve("game.ServerScriptService.Bootstrap")
 loaders[bootstrap](bootstrap)
 local world = Workspace:WaitForChild("CapyWorld")
 local builder = require(resolve("game.ServerScriptService.World.ZooBuilder"))
+local questServer = require(resolve("game.ServerScriptService.Gameplay.QuestServer"))
+local questLogic = require(resolve("game.ServerScriptService.Gameplay.QuestLogic"))
+local clientModule = resolve("game.StarterPlayer.StarterPlayerScripts.CapyClient")
 local layout = require(resolve("game.ReplicatedStorage.Shared.WorldLayout"))
 local geometry = require(resolve("game.ServerScriptService.World.Geometry"))
-check(world:GetAttribute("Phase") == "R1", "Missing R1 phase")
+check(world:GetAttribute("Phase") == "POLISH-1", "Missing R1 phase")
 local ground = world.Terrain.ParkGround
 check(ground.Size.X == 600 and ground.Size.Z == 500, "Expected 600 x 500 world")
 local parts, obstacles = {}, {}
@@ -53,6 +56,7 @@ for _, part in world:GetDescendants() do
         check(math.abs(part.Position.X) + half.X <= 300.01
             and math.abs(part.Position.Z) + half.Z <= 250.01, "Out of bounds: " .. part:GetFullName())
         check(type(part.CanCollide) == "boolean", "Collision policy missing")
+        check(part.CanQuery==part.CanCollide and part.CanTouch==false,"Decorative physics/query policy regressed")
         if part.CanCollide and part.Position.Y + half.Y > 2 then table.insert(obstacles, part) end
     end
 end

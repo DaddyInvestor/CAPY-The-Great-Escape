@@ -26,6 +26,30 @@ local function pavilion(parent: Model, name: string, x: number, z: number, w: nu
                 Vector3.new(x + dx, 12, z + d / 2), 1.3, 1.3, style.Wood, Enum.Material.Wood)
         end
     end
+    -- Visible joinery and warm porch lights give the shared roof language believable scale.
+    for _, side in {-1, 1} do
+        local xpost = x + side * (w / 2 - 1)
+        G.beam(house, "PorchBrace", Vector3.new(xpost, 11, z + d / 2 - 1),
+            Vector3.new(xpost - side * 4, 15, z + d / 2 - 1), 0.8, 0.8, style.DarkWood, Enum.Material.Wood)
+    end
+    G.beam(house, "FrontHeader", Vector3.new(x-w/2, 15, z+d/2), Vector3.new(x+w/2, 15, z+d/2),
+        1.5, 1.3, style.DarkWood, Enum.Material.Wood)
+    if enclosed then
+        for _, side in {-1, 1} do
+            for j = -1, 1 do
+                G.part(house, "WindowLattice", Vector3.new(0.5, 5.5, 0.6),
+                    CFrame.new(x + side * (w/2-1), 8.5, z+j*4), style.DarkWood, Enum.Material.Wood)
+            end
+        end
+    end
+    local lantern = G.part(house, "PorchLantern", Vector3.new(1.2, 1.8, 1.2),
+        CFrame.new(x-w/2+4, 11.5, z+d/2+0.8), style.Cream, Enum.Material.Neon, false)
+    local light = Instance.new("PointLight")
+    light.Color = Color3.fromRGB(255, 218, 164)
+    light.Brightness = 0.6
+    light.Range = 12
+    light.Shadows = false
+    light.Parent = lantern
     -- Two pitched gables, a broad eave, a smaller upper roof and rising end ornaments.
     for tier = 1, 2 do
         local roofW, roofD = w + 5 - (tier - 1) * 7, d + 6 - (tier - 1) * 7
@@ -60,9 +84,9 @@ function Landmarks.build(world: Model, layout, style)
     local a = zones.A_CapybaraHabitat
     local shelter = pavilion(a, "HabitatShelter", -246, -79, 32, 24, style)
     G.sign(shelter, "HabitatSign", Vector3.new(-246, 12, -65), "CAPY SANCTUARY", style.DarkWood, 25)
-    -- A recognizable sculptural anchor, explicitly not a controller or animal AI.
+    -- Mango keeps the original sculptural silhouette and now reacts to feeding; not a controller or roaming AI.
     local statue = G.model(a, "CapySculpture")
-    statue:SetAttribute("DecorativeOnly", true)
+    statue:SetAttribute("ReactiveNPC", "Mango")
     local brown = Color3.fromRGB(171, 125, 84)
     G.ellipsoid(statue, "Body", Vector3.new(-249, 4, -143), Vector3.new(10, 6, 6), brown, Enum.Material.SmoothPlastic)
     G.ellipsoid(statue, "Head", Vector3.new(-243, 5, -143), Vector3.new(5, 5, 5), brown, Enum.Material.SmoothPlastic)
@@ -87,9 +111,19 @@ function Landmarks.build(world: Model, layout, style)
     G.sign(kiosk, "MapSign", Vector3.new(107, 11, -155), "PARK MAP / INFO", style.DarkWood)
     local d = zones.D_ZooSecurity
     local office = pavilion(d, "SecurityOffice", 215, -166, 46, 28, style, true)
+    G.part(office,"RangerCanvasAwning",Vector3.new(25,2,7),CFrame.new(215,12,-147),
+        Color3.fromRGB(69,113,79),Enum.Material.Fabric,true,"WedgePart")
+    for _, x in {203,227} do
+        G.part(office,"AwningPost",Vector3.new(1.2,11,1.2),CFrame.new(x,5.5,-144),style.DarkWood,Enum.Material.Wood)
+    end
     G.sign(office, "SecuritySign", Vector3.new(215, 12, -150), "RANGER STATION", style.DarkWood, 28)
     local e = zones.E_MaintenanceYard
     local shed = pavilion(e, "MaintenanceShed", -225, 14, 38, 24, style, true)
+    G.part(shed,"ToolLeanToRoof",Vector3.new(20,3,28),CFrame.new(-251,12,14),
+        style.Roof,Enum.Material.WoodPlanks,true,"WedgePart")
+    for _, z in {2,26} do
+        G.part(shed,"LeanToPost",Vector3.new(1.5,11,1.5),CFrame.new(-260,5.5,z),style.DarkWood,Enum.Material.Wood)
+    end
     G.sign(shed, "MaintenanceSign", Vector3.new(-225, 12, 28), "MAINTENANCE", style.DarkWood, 26)
     G.disc(e, "ServiceApron", -211, 38, 39, 22, 0.2, 0.6, style.Stone, Enum.Material.Cobblestone)
     for i = 1, 3 do

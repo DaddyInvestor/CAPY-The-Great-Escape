@@ -4,7 +4,7 @@
 
 **ไม่ต้องใช้ Rojo, ZIP หรือ Terminal**
 
-**R1: พื้นที่ 600 × 500 studs / 8 โซน — Studio Playtest: NOT RUN**
+**POLISH-1: 600 × 500 studs / 8 โซน / ภารกิจช่วย Mango — Studio Playtest: NOT RUN**
 
 1. เปิดไฟล์ [STUDIO_ONE_PASTE.lua](STUDIO_ONE_PASTE.lua) ใน Branch นี้
 2. กดปุ่ม **Copy raw file** ของ GitHub เพื่อคัดลอกโค้ดทั้งหมด
@@ -13,73 +13,65 @@
 5. ตรวจว่า Explorer มี **Workspace -> CapyWorld**; กด **File -> Save to File** เก็บเป็น .rbxl
 6. กด Play ดูฉากและตำแหน่งเกิด (ลบ SpawnLocation เริ่มต้นของ Baseplate หากมี เพื่อใช้ CapySpawn)
 
-**ข้อควรทราบ:** รันโค้ดซ้ำจะสร้าง CapyWorld ใหม่แทนตัวเก่า ฉากเป็นต้นแบบ Static ใน Edit Mode; ยังไม่มีคาปิบาร่า 4 ขา เจ้าหน้าที่ไล่จับ หรือภารกิจหนีสำเร็จ และวิธีนี้ไม่จำเป็นต้องเชื่อมต่อกับ Rojo
+**ข้อควรทราบ:** ติดตั้งฉากใน Edit Mode แล้ว Save จากนั้นกด Play เพื่อเริ่มภารกิจให้อาหาร Mango → ซ่อมปั๊ม → คุยกับ Mali → เปิดประตู ความคืบหน้าอยู่เฉพาะรอบนี้ ยังไม่ใช่เกมหนีฉบับเต็ม และยังไม่ได้ทดสอบจริงใน Studio
 
 ---
 
 CAPY-The-Great-Escape
 
-## CAPY-M01A FOUNDATION — R1 reconstruction
+## CAPY POLISH-1 — Mango's Morning Rescue
 
-**CAPY ตัวตึง: The Great Escape** is a planned cartoon story/open-world adventure
-set in a fictional tropical wildlife park inspired by Khao Yai, Thailand.
+An incremental upgrade of the existing 600 × 500 park, with all eight zones,
+curved circulation, habitat, pond, buildings, spawn, three markers, forest and
+mountain backdrop retained. **Development build; not release-ready.**
 
-R1 replaces the original 420 × 360 blockout with a **600 × 500 stud master layout**:
-eight connected zones, curved roads, a lobed habitat pond, low landscaped terraces,
-pitched terracotta landmark roofs, mixed tropical vegetation and mountain scenery.
-This is a static world foundation. R1 is not the complete M01A-R project or a
-playable escape mission. R2–R5 must wait for R1 review.
+### One-paste installation
 
-### Install immediately in Roblox Studio (no Rojo or Play Mode)
+Open [STUDIO_ONE_PASTE.lua](STUDIO_ONE_PASTE.lua) on GitHub, select **Raw**, copy
+its entire contents into Roblox Studio's Command Bar in **Edit Mode**, and execute.
+The park appears immediately. Save the place, then press **Play** for the quest.
+No Rojo, HTTP permissions, external assets or package installation are required.
+The installer also saves a server Script and client GUI/LocalScript template
+inside `CapyWorld.Runtime`, so the quest works after reopening the saved place.
 
-1. Open a place in Roblox Studio on Windows or macOS. Stop Play/Run so you are in
-   **Edit Mode**, then open **View → Command Bar**.
-2. Open [STUDIO_ONE_PASTE.lua](STUDIO_ONE_PASTE.lua) on GitHub,
-   use **Raw**, and copy the **entire file**. Paste it into the Command Bar and execute.
-3. The complete generated `Workspace/CapyWorld` appears in Edit Mode. Inspect it
-   in Explorer and use Studio's frame-selection action to locate it if needed.
-4. Save the place. No plugins, HTTP access, external assets or runtime scripts are
-   required for the installed static environment to remain visible after saving.
-5. Before a separate Play test, manually remove or disable any unrelated default
-   SpawnLocation if you want the avatar to use the habitat's `CapySpawn`. The
-   installer deliberately preserves unrelated Workspace content, including spawns.
+Only CAPY-owned `CapyWorld` models are replaced. An unowned name collision is
+refused. Construction and runtime-source preparation finish before the previous
+world is removed. Shared Terrain, Lighting and unrelated models are preserved.
+Session players are assigned the park spawn; unrelated SpawnLocations are retained.
 
-The installer is deterministic and replaces only a CAPY-owned `CapyWorld`. It
-accepts the prior M01A generator's ownership tags for upgrades. An unowned model
-with the same name causes a clear error and is preserved; rename/move that model
-manually if you want to install. Shared `Workspace.Terrain`, Lighting, existing
-services, and unrelated models are not modified. New geometry is built detached
-before the previous owned world is replaced.
+### What to do in Play Mode
 
-### Modular development with Rojo
+1. Feed Mango at the habitat feeder. Use the native keyboard/gamepad/touch prompt.
+2. Find the blue garden pump and hold its repair prompt.
+3. Talk to Ranger Mali on the east side of the visitor plaza.
+4. Present your trail pass at the grand entrance; the portcullis lifts.
+5. Optional: follow the forest hint to collect a postcard for the journal.
 
-Install [Rojo 7.7.1](https://github.com/rojo-rbx/rojo/releases/tag/v7.7.1) on `PATH`
-and its matching Studio plugin. From the repository root:
+Mango reacts to breakfast; Mali waves; the pump indicator changes. A collapsible,
+width-constrained journal shows the next objective, distance, progress and dialogue.
+The default Roblox avatar, controller, camera and Animate script remain in use,
+with subtle eased FOV feedback. Session respawns use habitat/plaza/entrance
+checkpoints according to quest progress. Rejoining or rebuilding resets progress.
+
+The gate is shared and stays open after the first successful completion, while
+completion remains validated separately per player. Other players can explore
+through the open gate but cannot skip their mission steps. There is no currency,
+DataStore saving, custom capybara controller or roaming guard AI. Pond water remains
+decorative. The two other future escape anchors remain closed.
+
+### Modular development and checks
+
+Install [Rojo 7.7.1](https://github.com/rojo-rbx/rojo/releases/tag/v7.7.1),
+[Luau 0.743](https://github.com/luau-lang/luau/releases/tag/0.743) (`luau` and
+`luau-compile`), and Python 3.10+ on PATH. From this repository root:
 
 ```sh
 rojo serve default.project.json
 ```
 
-Connect/sync the plugin in a new Baseplate, then press Play. The server bootstrap
-builds the same world. Restart `rojo serve` for each development session. No secrets,
-package dependencies, DataStore access or other services are needed. Generated
-`CapyWorld` ownership tags allow the bootstrap to rebuild a saved installer world.
-
-To build a place file instead:
-
-```sh
-mkdir -p build
-rojo build default.project.json -o build/CAPY-M01A-R1.rbxlx
-```
-
-`build/` is ignored by Git. The one-paste installer is outside the Rojo source
-mapping and does not run as a second server script.
-
-### Regenerate and validate
-
-Install Python 3.10+ and the `luau` / `luau-compile` binaries from
-[Luau 0.743](https://github.com/luau-lang/luau/releases/tag/0.743) on `PATH`, as
-well as Rojo. From the repository root:
+Connect the Rojo Studio plugin and press Play. Bootstrap starts the same server
+quest module; StarterPlayerScripts runs the same client source. To refresh and
+check the generated installer:
 
 ```sh
 python3 tools/generate_installer.py
@@ -87,38 +79,24 @@ python3 tools/generate_layout_diagram.py
 python3 tests/check_world.py
 ```
 
-Commit the regenerated installer whenever its source modules change. The check
-runner rejects stale installer/diagram outputs, verifies actual Rojo mapping,
-compiles production scripts and the installer, and executes the real builder in
-a mocked Roblox data model. It checks bounds, the zone graph and physical route
-junctions, sampled 12-stud central walking corridors, slope, spawn clearance,
-fence/gate alignment, markers, ownership safety and repeatable builds. It also
-runs the installer without the synced source modules and compares its geometry
-with the modular build.
+The installer has no runtime module downloads. Its saved sources are generated
+from the modular gameplay and client code, not separately maintained copies.
+The source hash covers world, server and client sources. Build a place with
+`rojo build default.project.json -o build/CAPY-POLISH.rbxlx` after creating `build/`.
 
-These checks do **not** perform Roblox-aware type checking, rendering, engine
-physics, avatar movement, network testing or performance measurement.
+[Iteration audit, ranked weaknesses, pass reviews and before/after evidence](docs/POLISH_01_REVIEW.md)
 
-### Layout and review
+[Studio acceptance and regression procedure](docs/TEST_PLAN.md)
 
-![R1 authored layout schematic, not a Studio screenshot](docs/R1_LAYOUT.svg)
+[Architecture](docs/ARCHITECTURE.md) · [Original layout plan](docs/R1_LAYOUT.md)
 
-- [Zone layout, route widths and terrain plan](docs/R1_LAYOUT.md)
-- [R2 asset placement plan — future work](docs/R2_ASSET_PLAN.md)
-- [Architecture and installer generation](docs/ARCHITECTURE.md)
-- [Automated results and limitations](docs/R1_VALIDATION.md)
-- [Studio test procedure](docs/TEST_PLAN.md)
+### Validation boundary
 
-### Current limitations
+**Actual Studio Edit Mode installation and Studio Playtest: NOT RUN.** No Studio
+screenshots or FPS measurements were captured. Compilation and the mocked data-model
+checks exercise real source but do not verify rendering, physics, real avatar
+movement, touch input, network latency, or Studio's Script.Source installation.
+Those remain release blockers; passing static checks is not visual approval.
 
-**Roblox Studio Playtest: NOT RUN.** No Studio screenshots have been captured.
-The schematic above describes authored placement; it is not visual verification.
-Studio must verify the intended composition, roof orientation, signage, actual
-collisions, spawn behavior and frame rate before visual acceptance.
-
-The habitat visitor gate is open for layout inspection. The three perimeter
-escape-route anchors remain closed. Water is a shallow decorative surface over
-solid ground, not swimmable Terrain water. Checkpoints are visual markers only.
-Buildings are R1 architectural anchors with R2 detail reservations. Guard AI,
-escape puzzles, rewards, saving and the capybara controller are not implemented.
-The capy sculpture is decorative, not an NPC or playable character.
+The original R1 documents/results are historical baseline evidence. This iteration
+implements a short introductory quest, not the complete escape campaign.
